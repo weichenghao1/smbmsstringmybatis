@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.smbms.dao.provider.ProviderMapper">
+
+    <insert id="addProvider" parameterType="Provider">
+        INSERT INTO smbms_provider(proCode,proName,proDesc,proContact,proPhone,proAddress,proFax,createdBy)
+        value(#{proCode},#{proName},#{proDesc},#{proContact},#{proPhone},#{proAddress},#{proFax},#{createdBy})
+    </insert>
+
+    <select id="getProviderList" resultType="Provider">
+        select * from smbms_provider
+        <trim prefix="where" prefixOverrides="AND |OR ">
+            <if test="proName != null">
+                and proName like Concat('%',#{proName},'%')
+            </if>
+            <if test="proCode != null">
+                and proCode like Concat ('%',#{proCode},'%')
+            </if>
+        </trim>
+
+
+    </select>
+
+
+    <delete id="deleteProviderById" parameterType="String">
+        delete from smbms_provider where id=#{delId}
+    </delete>
+
+
+    <select id="getProviderById" resultType="Provider">
+        select * from smbms_provider where id=#{id}
+    </select>
+
+    <update id="modify" parameterType="Provider">
+        update smbms_provider
+        <set>
+            <if test="proName!=null and proName!=''">proName=#{proName},</if>
+            <if test="proDesc!=null and proDesc!=''">proDesc=#{proDesc},</if>
+            <if test="proContact!=null and proContact!=''">proContact=#{proContact},</if>
+            <if test="proPhone!=null and proPhone!=''">proPhone=#{proPhone},</if>
+            <if test="proAddress!=null and proAddress!=''">proAddress=#{proAddress},</if>
+            <if test="proFax!=null and proFax!=''">proFax=#{proFax},</if>
+            <if test="modifyBy!=null and modifyBy>0">modifyBy=#{modifyBy},</if>
+            <if test="modifyDate!=null">modifyDate=#{modifyDate}</if>
+        </set>
+        <where>
+            <choose>
+                <when test="id!=null and id!=''">
+                    id = #{id}
+                </when>
+                <otherwise>
+                    1!=1
+                </otherwise>
+            </choose>
+        </where>
+    </update>
+
+
+</mapper>

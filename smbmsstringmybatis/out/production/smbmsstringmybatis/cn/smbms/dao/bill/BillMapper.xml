@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.smbms.dao.bill.BillMapper">
+
+    <insert id="add" parameterType="Bill">
+
+        insert into smbms_bill(billCode,productName,productDesc,
+        productUnit,productCount,totalPrice,isPayment,providerId,createdBy,creationDate)
+
+        values(#{billCode},#{productName},#{productDesc},#{productUnit},#{productCount},#{totalPrice},#{isPayment},#{providerId},#{createdBy},#{creationDate})
+    </insert>
+
+
+    <!--通过查询条件获取供应商列表-模糊查询-getBillList-->
+    <select id="getBillList" parameterType="Bill" resultType="Bill">
+        select b.*,p.proName as providerName from smbms_bill b, smbms_provider p where b.providerId = p.id
+        <if test="productName!=null and productName!=''">
+            and productName like CONCAT("%",#{productName},"%")
+        </if>
+        <if test="providerId!=null and providerId>0">
+            and providerId = #{providerId}
+        </if>
+        <if test="isPayment!=null and isPayment>0">
+            and isPayment = #{isPayment}
+        </if>
+    </select>
+
+
+    <delete id="deleteBillById" parameterType="String">
+        delete from smbms_bill where id=#{delId}
+    </delete>
+
+
+    <select id="getBillById" resultType="Bill" parameterType="String">
+        SELECT b.*,p.proName as providerName FROM smbms_bill b,smbms_provider p WHERE b.id=#{id} AND b.providerId = p.id
+    </select>
+
+    <update id="modify" parameterType="Bill">
+        update smbms_bill
+        <set>
+            <if test="productName !=null">productName=#{productName},</if>
+            <if test="productDesc!=null">productDesc=#{productDesc},</if>
+            <if test="productUnit!=null ">productUnit=#{productUnit},</if>
+            <if test="productCount!=null ">productCount=#{productCount},</if>
+            <if test="totalPrice!=null ">totalPrice=#{totalPrice},</if>
+            <if test="isPayment>0">isPayment=#{isPayment},</if>
+            <if test="providerId>0">providerId=#{providerId},</if>
+            <if test="modifyBy>0">modifyBy=#{modifyBy},</if>
+            <if test="modifyDate!=null">modifyDate=#{modifyDate}</if>
+        </set>
+        where id =#{id}
+    </update>
+
+
+    <select id="getBillCountByProviderId" parameterType="String" resultType="int">
+        select count(1) as billCount from smbms_bill where providerId = #{providerId}
+    </select>
+
+
+</mapper>

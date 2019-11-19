@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="jiabao">
+    <CLASSES>
+      <root url="file://E:/jiabao" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://E:/jiabao" />
+    </SOURCES>
+    <jarDirectory url="file://E:/jiabao" recursive="false" />
+    <jarDirectory url="file://E:/jiabao" recursive="false" type="SOURCES" />
+  </library>
+</component>
